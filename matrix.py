@@ -49,14 +49,20 @@ class Matrix:
         if isinstance(other, Matrix):
             if self.cols != other.rows:
                 raise ValueError("Incompatible matrix dimensions for multiplication.")
-            result = Matrix(self.rows, other.cols)
+            data = [[0.0 for _ in range(other.cols)] for _ in range(self.rows)] 
             for i in range(self.rows):
                 for j in range(other.cols):
-                    result[i, j] = sum(
+                    data[i][j] = sum(
                         self.data[i][k] * other.data[k][j]
                         for k in range(self.cols)
                     )
-            return result
+            if self.rows == 1 and other.cols == 1:
+                return data[0][0]
+            elif self.rows == 1:
+                return Vector(other.cols, data[0])
+            elif other.cols == 1:
+                return Vector(self.rows, [data[i][0] for i in range(self.rows)])
+            return Matrix(self.rows, other.cols, data)
 
         if isinstance(other, Real):
             return Matrix(
@@ -88,16 +94,7 @@ class Matrix:
         )
 
     def __sub__(self, other: "Matrix"):
-        if self.rows != other.rows or self.cols != other.cols:
-            raise ValueError("Matrices must have the same dimensions for subtraction.")
-        return Matrix(
-            self.rows,
-            self.cols,
-            [
-                [self.data[i][j] - other.data[i][j] for j in range(self.cols)]
-                for i in range(self.rows)
-            ],
-        )
+        return self + (-other)
 
     def transpose(self):
         return Matrix(
@@ -127,6 +124,12 @@ class Vector(Matrix):
                 raise ValueError("Vector data length does not match its size.")
             column = [[value] for value in values]
         super().__init__(size, 1, column)
+
+    def norm(self):
+        return sum(value[0] ** 2 for value in self.data) ** 0.5
+
+    def __getitem__(self, idx):
+        return self.data[idx]
 
 
 class MatrixIterator:
