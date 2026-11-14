@@ -1,22 +1,9 @@
-from pathlib import Path
-
-from matrix import Matrix
+from embedding_manager import embedding_manager
 from words import word_manager
 
 
-def load_w_in():
-    embeddings_directory = Path(__file__).parent / "embeddings"
-    w_in_path = embeddings_directory / "embeddings_in_90.txt"
-    if not w_in_path.exists():
-        raise FileNotFoundError(f"{w_in_path} does not exist. Please run the training first.")
-    
-    with w_in_path.open("r", encoding="utf-8") as f:
-        data = [list(map(float, line.strip().split(','))) for line in f]
-    
-    return Matrix(len(data), len(data[0]), data)
-
 def find_synonyms(word: str, top_n: int = 5):
-    w_in = load_w_in()
+    w_in = embedding_manager.load("embeddings_in", 90)
     if word not in word_manager.words:
         raise ValueError(f"Word '{word}' not found in the vocabulary.")
     
