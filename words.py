@@ -12,7 +12,7 @@ class WordManager:
     def _word_iterator(self) -> Iterator[str]:
         for line in self.lines_factory():
             word = ""
-            for symbol in line:
+            for symbol in line.lower():
                 if symbol.isalpha():
                     word += symbol
                 elif word:
