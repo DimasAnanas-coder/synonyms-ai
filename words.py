@@ -1,6 +1,7 @@
 from collections import deque
 from collections.abc import Callable, Iterator
 
+from filter_manager import filter_manager
 from texts.text import load_text
 
 
@@ -12,14 +13,14 @@ class WordManager:
     def _word_iterator(self) -> Iterator[str]:
         for line in self.lines_factory():
             word = ""
-            for symbol in line.lower():
+            for symbol in line:
                 if symbol.isalpha():
                     word += symbol
                 elif word:
-                    yield word
+                    yield filter_manager.normalize_word(word)
                     word = ""
             if word:
-                yield word
+                yield filter_manager.normalize_word(word)
 
     def _build_words_dict(self) -> dict[str, int]:
         words: dict[str, int] = {}
