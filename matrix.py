@@ -129,7 +129,7 @@ class Vector(Matrix):
         return sum(value[0] ** 2 for value in self.data) ** 0.5
 
     def __getitem__(self, idx):
-        return self.data[idx]
+        return self.data[idx][0]
 
 
 class MatrixIterator:
