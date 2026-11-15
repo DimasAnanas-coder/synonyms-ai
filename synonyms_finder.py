@@ -1,10 +1,11 @@
 from embedding_manager import embedding_manager
+from env import SYNONYM_EMBEDDINGS_NAME, SYNONYM_EPOCH, SYNONYM_WORD
 from filter_manager import filter_manager
 from words import word_manager
 
 
-def find_synonyms(word: str, top_n: int = 5):
-    w_in = embedding_manager.load("embeddings_in", 90)
+def find_synonyms(word: str = SYNONYM_WORD, top_n: int = 5):
+    w_in = embedding_manager.load(f"{SYNONYM_EMBEDDINGS_NAME}_in", SYNONYM_EPOCH)
     word = filter_manager.normalize_word(word)
     if word not in word_manager.words:
         raise ValueError(f"Word '{word}' not found in the vocabulary.")
@@ -22,8 +23,7 @@ def find_synonyms(word: str, top_n: int = 5):
     return filter_manager.filter_candidates(word, similarities, top_n)
 
 if __name__ == "__main__":
-    word = "ехать"
     top_n = 10
-    synonyms = find_synonyms(word, top_n)
+    synonyms = find_synonyms(top_n=top_n)
     for synonym, similarity in synonyms:
         print(f"{synonym}: {similarity}")
