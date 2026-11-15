@@ -47,9 +47,9 @@ python main.py
 Чтобы продолжить обучение с сохранённых матриц, передайте пути к файлам входных и выходных векторов и число дополнительных эпох:
 
 ```python
-from main import continue_training
+from training_manager import training_manager
 
-continue_training(
+training_manager.continue_training(
     "embeddings/embeddings_in_90.txt",
     "embeddings/embeddings_out_90.txt",
     epochs=20,
@@ -75,7 +75,8 @@ for word, score in find_synonyms("машина", top_n=10):
 
 ## Структура проекта
 
-- `main.py` — обучение Skip-gram и сохранение весов;
+- `main.py` — создание случайных матриц эмбеддингов и запуск обучения;
+- `training_manager.py` — обучение с нуля на переданных матрицах и продолжение обучения из файлов;
 - `embedding_manager.py` — создание случайных векторов, чтение и запись матриц эмбеддингов;
 - `filter_manager.py` — лемматизация, стоп-слова и фильтр частей речи;
 - `matrix.py` — матрицы и векторы без NumPy;
