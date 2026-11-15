@@ -29,9 +29,14 @@ class EmbeddingManager:
     def load(self, name: str, epoch: int) -> Matrix:
         """Load a previously saved matrix from the embeddings directory."""
         path = self.directory / f"{name}_{epoch}.txt"
+        return self.load_file(path)
+
+    def load_file(self, path: str | Path) -> Matrix:
+        """Load an embedding matrix from an explicit file path."""
+        path = Path(path)
         if not path.exists():
             raise FileNotFoundError(
-                f"{path} does not exist. Run the training first to create it."
+                f"Embedding file does not exist: {path}"
             )
 
         with path.open("r", encoding="utf-8") as input_file:
